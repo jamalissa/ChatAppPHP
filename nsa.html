@@ -1,0 +1,60 @@
+<html>
+<head>
+<title>NSA is watching</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="stylesheet.css" />
+<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/2.2.3/jquery.min.js"></script>
+</head>
+<body>
+<h1>What has been said?</h1>
+
+ <!-- Ajax-Anfrage hier direkt in der .php -->
+ <script>
+    onload = (function () {
+        //startajax();
+        setInterval(function(){ startajax(); }, 1000);
+    });
+
+
+    function startajax () {	
+        console.log("Start Ajax");
+        $.ajax({
+            url: ('HandleMessage.php'),
+            data: {},
+            type: 'GET',
+            timeout: 1000,
+            dataType: 'json',
+            error: errorOccured,
+            success: sowMessage
+            
+        }) 
+    }
+
+
+    function sowMessage (data) {	
+        console.log(data);
+        var output = "";
+        data.forEach(element => {
+                if (element.name == "CP2") {
+                    output += '<p class=\"ich\">CP2: ' + " " +element.message + " " +element.long+ " " +element.lat+'</p>';
+                } else {
+                    output += '<p class=\"remote\">CP1: ' + " " +element.message + " " +element.long +" " +element.lat+'</p>';
+                }
+            });
+        document.getElementById("messageContent").innerHTML = output;
+
+      
+    }
+
+    function errorOccured () {
+        document.getElementById("messageContent").innerHTML = "Fehler: Es konnten keine Daten empfangen werden";
+    }
+    
+
+
+
+    
+</script>
+<div id="messageContent"><!--Hier kommen die Messages hin--></div>
+</body>
+</html>
